@@ -13,6 +13,8 @@ namespace FileHelpers
         /// <summary>The char used to quote the string.</summary>
         public char QuoteChar { get; private set; }
 
+        public bool AllowQuoteCharInString { get; private set; }
+
         internal QuoteMode mQuoteMode = QuoteMode.AlwaysQuoted;
 
         /// <summary>Indicates if the handling of optionals in the quoted field.</summary>
@@ -43,7 +45,7 @@ namespace FileHelpers
         /// </summary>
         /// <param name="quoteChar">The char used to quote the string.</param>
         public FieldQuotedAttribute(char quoteChar)
-            : this(quoteChar, QuoteMode.OptionalForRead, MultilineMode.AllowForBoth) {}
+            : this(quoteChar, QuoteMode.OptionalForRead, MultilineMode.AllowForBoth, false) {}
 
         /// <summary>
         /// Indicates that the field must be read and written as a "Quoted String"
@@ -57,19 +59,32 @@ namespace FileHelpers
         /// <param name="mode">Indicates if the handling of optionals in the quoted field.</param>
         /// <param name="multiline">Indicates if the field can span multiple lines.</param>
         public FieldQuotedAttribute(QuoteMode mode, MultilineMode multiline)
-            : this('"', mode, multiline) {}
+            : this('"', mode, multiline, false) {}
 
         /// <summary>Indicates that the field must be read and written as a Quoted String (that can be optional).</summary>
         /// <param name="quoteChar">The char used to quote the string.</param>
         /// <param name="mode">Indicates if the handling of optionals in the quoted field.</param>
         public FieldQuotedAttribute(char quoteChar, QuoteMode mode)
-            : this(quoteChar, mode, MultilineMode.AllowForBoth) {}
+            : this(quoteChar, mode, MultilineMode.AllowForBoth, false) {}
 
-        /// <summary>Indicates that the field must be read and written as a Quoted String (that can be optional).</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldQuotedAttribute"/> class.
+        /// </summary>
+        /// <param name="quoteChar">The quote character.</param>
+        /// <param name="mode">The mode.</param>
+        /// <param name="multiline">The multiline.</param>
+        public FieldQuotedAttribute(char quoteChar, QuoteMode mode, MultilineMode multiline)
+            : this(quoteChar, mode, multiline, false) { }
+
+        /// <summary>
+        /// Indicates that the field must be read and written as a Quoted String (that can be optional).
+        /// </summary>
         /// <param name="quoteChar">The char used to quote the string.</param>
         /// <param name="mode">Indicates if the handling of optionals in the quoted field.</param>
         /// <param name="multiline">Indicates if the field can span multiple lines.</param>
-        public FieldQuotedAttribute(char quoteChar, QuoteMode mode, MultilineMode multiline)
+        /// <param name="allowQuoteCharInString">if set to <c>true</c> [allow quote character in string].</param>
+        /// <exception cref="BadUsageException">You can't use the null char (\\0) as quoted.</exception>
+        public FieldQuotedAttribute(char quoteChar, QuoteMode mode, MultilineMode multiline, bool allowQuoteCharInString = false)
         {
             if (quoteChar == '\0')
                 throw new BadUsageException("You can't use the null char (\\0) as quoted.");
@@ -77,11 +92,12 @@ namespace FileHelpers
             QuoteChar = quoteChar;
             QuoteMode = mode;
             QuoteMultiline = multiline;
+            AllowQuoteCharInString = allowQuoteCharInString;
         }
 
         /// <summary>Indicates that the field must be read and written like a Quoted String with double quotes.</summary>
         /// <param name="multiline">Indicates if the field can span multiple lines.</param>
         public FieldQuotedAttribute(MultilineMode multiline)
-            : this('\"', QuoteMode.OptionalForRead, multiline) {}
+            : this('\"', QuoteMode.OptionalForRead, multiline, false) {}
     }
 }

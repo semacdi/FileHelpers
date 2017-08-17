@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FileHelpers
@@ -23,8 +24,23 @@ namespace FileHelpers
         /// <param name="line">Line to extract from (with extra info)</param>
         /// <param name="quoteChar">Quote char to remove</param>
         /// <param name="allowMultiline">can we have a new line in middle of string</param>
-        /// <returns>Extracted information</returns>
-        internal static ExtractedInfo ExtractQuotedString(LineInfo line, char quoteChar, bool allowMultiline)
+        /// <param name="sep">The sep.</param>
+        /// <param name="allowQuoteCharInString">if set to <c>true</c> [allow quote character in string].</param>
+        /// <returns>
+        /// Extracted information
+        /// </returns>
+        /// <exception cref="BadUsageException">
+        /// An empty String found. This can not be parsed like a QuotedString try to use SafeExtractQuotedString
+        /// or
+        /// The source string does not begin with the quote char: " + quoteChar
+        /// or
+        /// The current field has an unclosed quoted string. Complete line: " +
+        ///                                                     res.ToString()
+        /// or
+        /// The current field has an unclosed quoted string. Complete Filed String: " +
+        ///                                         res.ToString()
+        /// </exception>
+        internal static ExtractedInfo ExtractQuotedString(LineInfo line, char quoteChar, bool allowMultiline, string sep, bool allowQuoteCharInString)
         {
             //			if (line.mReader == null)
             //				throw new BadUsageException("The reader can´t be null");
@@ -56,13 +72,28 @@ namespace FileHelpers
                             firstFound = true;
                     }
                     else {
-                        if (firstFound) {
-                            // This was the end of the string
-                            line.mCurrentPos = i;
-                            return new ExtractedInfo(res.ToString());
+                        if (firstFound)
+                        {
+
+                            bool done = true;
+                            if (allowQuoteCharInString && sep != null && line.mLineStr.Length >= i + sep.Length)
+                            {
+                                // Quoted string not next to seperator
+                                if (line.mLineStr.Substring(i, sep.Length) != sep)
+                                {
+                                    done = false;
+                                }
+                            }
+
+                            if (done)
+                            {
+                                // This was the end of the string
+                                line.mCurrentPos = i;
+                                return new ExtractedInfo(res.ToString());
+                            }
                         }
-                        else
-                            res.Append(line.mLineStr[i]);
+                        
+                        res.Append(line.mLineStr[i]);
                     }
                     i++;
                 }

@@ -38,6 +38,9 @@ namespace FileHelpers.Dynamic
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private char mQuoteChar = '"';
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool mAllowQuoteCharInString = false;
+
         /// <summary>Indicates the char used to quote this field. (only used when FieldQuoted is true)</summary>
         public char QuoteChar
         {
@@ -45,6 +48,11 @@ namespace FileHelpers.Dynamic
             set { mQuoteChar = value; }
         }
 
+        public bool AllowQuoteCharInString
+        {
+            get { return mAllowQuoteCharInString;}
+            set { mAllowQuoteCharInString = value; }
+        }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private QuoteMode mQuoteMode = QuoteMode.OptionalForRead;

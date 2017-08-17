@@ -235,6 +235,7 @@ namespace FileHelpers
 
             // PROCESS IN NORMAL CONDITIONS
             if (attributes.Length > 0) {
+                
                 FieldAttribute fieldAttb = attributes[0];
 
                 if (fieldAttb is FieldFixedLengthAttribute) {
@@ -257,7 +258,8 @@ namespace FileHelpers
                                                     "' can't be marked with FieldDelimiter attribute, it is only for DelimitedRecords not for fixed ones.");
                     }
 
-                    res = new DelimitedField(fi, ((FieldDelimiterAttribute) fieldAttb).Delimiter);
+                    var fieldAttrib = (FieldDelimiterAttribute) fieldAttb;
+                    res = new DelimitedField(fi, fieldAttrib.Delimiter);
                 }
                 else {
                     throw new BadUsageException(
@@ -301,6 +303,8 @@ namespace FileHelpers
                             x.QuoteMode;
                         ((DelimitedField) res).QuoteMultiline =
                             x.QuoteMultiline;
+                        ((DelimitedField)res).AllowQuoteCharInString =
+                            x.AllowQuoteCharInString;
                     });
 
                 // FieldOrder

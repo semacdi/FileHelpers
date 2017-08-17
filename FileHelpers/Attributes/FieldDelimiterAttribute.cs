@@ -13,8 +13,12 @@ namespace FileHelpers
         /// </summary>
         public string Delimiter { get; private set; }
 
-        /// <summary>Indicates a different delimiter for this field. </summary>
+
+        /// <summary>
+        /// Indicates a different delimiter for this field.
+        /// </summary>
         /// <param name="separator">The separator string used to split the fields of the record.</param>
+        /// <exception cref="BadUsageException">The separator parameter of the FieldDelimiter attribute can't be null or empty</exception>
         public FieldDelimiterAttribute(string separator)
         {
             if (string.IsNullOrEmpty(separator)) {

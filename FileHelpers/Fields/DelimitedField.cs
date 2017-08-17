@@ -42,6 +42,14 @@ namespace FileHelpers
         /// <remarks>Also sets the discard count</remarks>
         internal string Separator { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow quote character in string].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [allow quote character in string]; otherwise, <c>false</c>.
+        /// </value>
+        internal bool AllowQuoteCharInString { get; set; }
+
         internal override int CharsToDiscard {
             get
             {
@@ -93,7 +101,7 @@ namespace FileHelpers
                 if (line.StartsWith(quotedStr)) {
                     var res = StringHelper.ExtractQuotedString(line,
                         QuoteChar,
-                        QuoteMultiline == MultilineMode.AllowForBoth || QuoteMultiline == MultilineMode.AllowForRead);
+                        QuoteMultiline == MultilineMode.AllowForBoth || QuoteMultiline == MultilineMode.AllowForRead, Separator, AllowQuoteCharInString);
 
                     if (TrimMode == TrimMode.Both ||
                         TrimMode == TrimMode.Right)
@@ -234,7 +242,8 @@ namespace FileHelpers
                 Separator = Separator,
                 QuoteChar = QuoteChar,
                 QuoteMode = QuoteMode,
-                QuoteMultiline = QuoteMultiline
+                QuoteMultiline = QuoteMultiline,
+                AllowQuoteCharInString = AllowQuoteCharInString
             };
             return res;
         }
