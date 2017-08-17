@@ -60,18 +60,17 @@ namespace FileHelpers
                     else {
                         if (firstFound)
                         {
-
-                            bool done = true;
                             if (allowQuoteCharInString && sep != null && line.mLineStr.Length >= i + sep.Length)
                             {
                                 // Quoted string not next to seperator
                                 if (line.mLineStr.Substring(i, sep.Length) != sep)
                                 {
-                                    done = false;
+                                    res.Append(quoteChar);
+                                    firstFound = false;
                                 }
                             }
 
-                            if (done)
+                            if (firstFound)
                             {
                                 // This was the end of the string
                                 line.mCurrentPos = i;

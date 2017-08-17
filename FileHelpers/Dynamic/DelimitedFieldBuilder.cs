@@ -90,7 +90,8 @@ namespace FileHelpers.Dynamic
                         quoteStr = @"\'";
 
                     attbs.AddAttribute("FieldQuoted('" + quoteStr + "', QuoteMode." + mQuoteMode.ToString() +
-                                       ", MultilineMode." + mQuoteMultiline.ToString() + ")");
+                                       ", MultilineMode." + mQuoteMultiline.ToString() + ", " + AllowQuoteCharInString.ToString().ToLower() + " )");
+
                 }
                 else if (lang == NetLanguage.VbNet) {
                     string quoteStr = mQuoteChar.ToString();
@@ -98,7 +99,7 @@ namespace FileHelpers.Dynamic
                         quoteStr = "\"\"";
 
                     attbs.AddAttribute("FieldQuoted(\"" + quoteStr + "\"c, QuoteMode." + mQuoteMode.ToString() +
-                                       ", MultilineMode." + mQuoteMultiline.ToString() + ")");
+                                       ", MultilineMode." + mQuoteMultiline.ToString() + ", " + AllowQuoteCharInString.ToString() + ")");
                 }
             }
         }
@@ -119,6 +120,7 @@ namespace FileHelpers.Dynamic
             writer.WriteElement("QuoteChar", this.QuoteChar.ToString(), "\"");
             writer.WriteElement("QuoteMode", this.QuoteMode.ToString(), "OptionalForRead");
             writer.WriteElement("QuoteMultiline", this.QuoteMultiline.ToString(), "AllowForRead");
+            writer.WriteElement("AllowQuoteCharInString", this.AllowQuoteCharInString ? "1" : "0", "0");
         }
 
         /// <summary>
@@ -146,6 +148,12 @@ namespace FileHelpers.Dynamic
             if (ele != null &&
                 ele.InnerText.Length > 0)
                 QuoteMultiline = (MultilineMode) Enum.Parse(typeof (MultilineMode), ele.InnerText);
+
+            ele = node["AllowQuoteCharInString"];
+            if (ele != null &&
+                ele.InnerText.Length > 0)
+                AllowQuoteCharInString = Convert.ToBoolean(ele.InnerText);
+
         }
     }
 }
