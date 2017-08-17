@@ -235,7 +235,6 @@ namespace FileHelpers
 
             // PROCESS IN NORMAL CONDITIONS
             if (attributes.Length > 0) {
-                
                 FieldAttribute fieldAttb = attributes[0];
 
                 if (fieldAttb is FieldFixedLengthAttribute) {
@@ -257,9 +256,8 @@ namespace FileHelpers
                         throw new BadUsageException(memberName +
                                                     "' can't be marked with FieldDelimiter attribute, it is only for DelimitedRecords not for fixed ones.");
                     }
-
-                    var fieldAttrib = (FieldDelimiterAttribute) fieldAttb;
-                    res = new DelimitedField(fi, fieldAttrib.Delimiter);
+                    
+                    res = new DelimitedField(fi, ((FieldDelimiterAttribute) fieldAttb).Delimiter);
                 }
                 else {
                     throw new BadUsageException(

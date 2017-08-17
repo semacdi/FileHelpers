@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FileHelpers
@@ -26,20 +25,7 @@ namespace FileHelpers
         /// <param name="allowMultiline">can we have a new line in middle of string</param>
         /// <param name="sep">The sep.</param>
         /// <param name="allowQuoteCharInString">if set to <c>true</c> [allow quote character in string].</param>
-        /// <returns>
-        /// Extracted information
-        /// </returns>
-        /// <exception cref="BadUsageException">
-        /// An empty String found. This can not be parsed like a QuotedString try to use SafeExtractQuotedString
-        /// or
-        /// The source string does not begin with the quote char: " + quoteChar
-        /// or
-        /// The current field has an unclosed quoted string. Complete line: " +
-        ///                                                     res.ToString()
-        /// or
-        /// The current field has an unclosed quoted string. Complete Filed String: " +
-        ///                                         res.ToString()
-        /// </exception>
+        /// <returns>Extracted information</returns>
         internal static ExtractedInfo ExtractQuotedString(LineInfo line, char quoteChar, bool allowMultiline, string sep, bool allowQuoteCharInString)
         {
             //			if (line.mReader == null)
